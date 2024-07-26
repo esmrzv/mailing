@@ -1,0 +1,23 @@
+<{% extends 'mailings/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                  <h2 class="card-title">{{ object.subject }}</h2>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title pricing-card-title">{{object.subject}}</h3>
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li>{{object.body | truncatechars:100}}</li>
+                    </ul>
+                    <a class="btn btn-primary" href="{% url 'mailings:message_list' %}" role="button">назад</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

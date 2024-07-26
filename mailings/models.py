@@ -1,5 +1,6 @@
 from django.db import models
 from django.forms import EmailField
+from django.utils import timezone
 
 NULLABLE = {
     'blank': True,
@@ -18,6 +19,18 @@ class Client(models.Model):
     class Meta:
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
+
+
+class Message(models.Model):
+    subject = models.CharField(verbose_name='Тема письма', max_length=150, default='Тема')
+    body = models.TextField(verbose_name='Тело письма', default='Письмо')
+
+    def __str__(self):
+        return f'{self.subject} - {self.body}'
+
+    class Meta:
+        verbose_name = 'Письмо'
+        verbose_name_plural = 'Письма'
 
 
 class MailingSettings(models.Model):
@@ -41,16 +54,15 @@ class MailingSettings(models.Model):
         (STATED, 'Запушена')
     ]
 
-    start_time = models.DateTimeField(verbose_name='Время начала рассылки')
-    end_time = models.DateTimeField(verbose_name='Время окончания рассылки')
+    start_time = models.DateTimeField(verbose_name='Время начала рассылки', default=timezone.now)
+    end_time = models.DateTimeField(verbose_name='Время окончания рассылки', default=timezone.now)
     periodicity = models.CharField(choices=PERIODICITY, max_length=50, verbose_name='Периодичность')
     status = models.CharField(choices=STATUS_CHOICES, max_length=50, verbose_name='Статус')
-    title = models.CharField(max_length=100, verbose_name='Название темы')
-    text = models.TextField(verbose_name='Письмо')
     client = models.ManyToManyField(Client, verbose_name='Клиент')
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='письмо')
 
     def __str__(self):
-        return (f'{self.title} time: {self.start_time} - {self.end_time}, periodicity: {self.periodicity},'
+        return (f'time: {self.start_time} - {self.end_time}, periodicity: {self.periodicity},'
                 f' status:{self.status}')
 
     class Meta:
@@ -59,7 +71,7 @@ class MailingSettings(models.Model):
 
 
 class Log(models.Model):
-    time = models.DateTimeField(verbose_name='дата и время последней попытки', auto_now_add=True)
+    time = models.DateTimeField(verbose_name='дата и время последней попытки', default=timezone.now)
     status = models.BooleanField(verbose_name='статус попытки')
     server_response = models.CharField(verbose_name='ответ почтового сервера', **NULLABLE)
 
@@ -72,4 +84,3 @@ class Log(models.Model):
     class Meta:
         verbose_name = 'лог'
         verbose_name_plural = 'логи'
-
