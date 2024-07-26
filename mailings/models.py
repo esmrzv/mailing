@@ -8,7 +8,7 @@ NULLABLE = {
 
 
 class Client(models.Model):
-    email = EmailField(max_length=100)
+    email = models.EmailField(max_length=100, verbose_name='email', unique=True, **NULLABLE)
     full_name = models.CharField(max_length=100, verbose_name='Полное имя')
     comment = models.TextField(verbose_name='Комментарий')
 

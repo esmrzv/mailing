@@ -1,18 +1,20 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
+
+
 from mailings.models import Client, MailingSettings, Log
 
 
 class ClientCreateView(CreateView):
     model = Client
-    fields = ('full_name', 'email', 'comment')
+    fields = ('email', 'full_name', 'comment')
     success_url = reverse_lazy('mailings:client_list')
 
 
 class ClientUpdateView(UpdateView):
     model = Client
-    fields = ('full_name', 'email', 'comment')
+    fields = ('email', 'full_name', 'comment')
     success_url = reverse_lazy('mailings:client_list')
 
 
@@ -38,7 +40,7 @@ class MailingSettingsCreateView(CreateView):
 class MailingSettingsUpdateView(UpdateView):
     model = MailingSettings
     fields = ('client', 'start_time', 'end_time', 'periodicity', 'status', 'title', 'text')
-    success_url = reverse_lazy('mailings:mailing_settings_list')
+    success_url = reverse_lazy('mailings:mailingsettings_list')
 
 
 class MailingSettingsDeleteView(DeleteView):

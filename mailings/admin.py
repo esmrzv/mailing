@@ -5,12 +5,10 @@ from mailings.models import Client, Log, MailingSettings
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'email', 'comment',)
-    list_filter = ('full_name', 'email',)
+    list_filter = ('full_name',)
 
 
-admin.register(MailingSettings)
-
-
+@admin.register(MailingSettings)
 class MailingSettingsAdmin(admin.ModelAdmin):
     list_display = ('title', 'periodicity', 'status',)
     list_filter = ('client', 'title',)
