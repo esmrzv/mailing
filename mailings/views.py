@@ -56,10 +56,9 @@ class MessageDeleteView(DeleteView):
     success_url = reverse_lazy('mailings:message_list')
 
 
-
 class MailingSettingsCreateView(CreateView):
     model = MailingSettings
-    fields = ('client', 'start_time', 'end_time', 'periodicity', 'status', 'title', 'text')
+    fields = ('client', 'start_time', 'end_time', 'periodicity', 'status', 'message')
     success_url = reverse_lazy('mailings:mailing_settings_list')
 
 

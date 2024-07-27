@@ -54,8 +54,8 @@ class MailingSettings(models.Model):
         (STATED, 'Запушена')
     ]
 
-    start_time = models.DateTimeField(verbose_name='Время начала рассылки', default=timezone.now)
-    end_time = models.DateTimeField(verbose_name='Время окончания рассылки', default=timezone.now)
+    start_time = models.DateTimeField(verbose_name='Время начала рассылки')
+    end_time = models.DateTimeField(verbose_name='Время окончания рассылки')
     periodicity = models.CharField(choices=PERIODICITY, max_length=50, verbose_name='Периодичность')
     status = models.CharField(choices=STATUS_CHOICES, max_length=50, verbose_name='Статус')
     client = models.ManyToManyField(Client, verbose_name='Клиент')
@@ -71,7 +71,7 @@ class MailingSettings(models.Model):
 
 
 class Log(models.Model):
-    time = models.DateTimeField(verbose_name='дата и время последней попытки', default=timezone.now)
+    time = models.DateTimeField(verbose_name='дата и время последней попытки', auto_now=True)
     status = models.BooleanField(verbose_name='статус попытки')
     server_response = models.CharField(verbose_name='ответ почтового сервера', **NULLABLE)
 
