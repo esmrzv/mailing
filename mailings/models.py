@@ -2,6 +2,8 @@ from django.db import models
 from django.forms import EmailField
 from django.utils import timezone
 
+from users.models import User
+
 NULLABLE = {
     'blank': True,
     'null': True
@@ -12,6 +14,7 @@ class Client(models.Model):
     email = models.EmailField(max_length=100, verbose_name='email', unique=True, **NULLABLE)
     full_name = models.CharField(max_length=100, verbose_name='Полное имя')
     comment = models.TextField(verbose_name='Комментарий')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец', **NULLABLE)
 
     def __str__(self):
         return f'{self.full_name} - {self.email}'
@@ -24,6 +27,7 @@ class Client(models.Model):
 class Message(models.Model):
     subject = models.CharField(verbose_name='Тема письма', max_length=150, default='Тема')
     body = models.TextField(verbose_name='Тело письма', default='Письмо')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец', **NULLABLE)
 
     def __str__(self):
         return f'{self.subject} - {self.body}'
@@ -60,6 +64,7 @@ class MailingSettings(models.Model):
     status = models.CharField(choices=STATUS_CHOICES, max_length=50, verbose_name='Статус')
     client = models.ManyToManyField(Client, verbose_name='Клиент')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='письмо')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец', **NULLABLE)
 
     def __str__(self):
         return (f'time: {self.start_time} - {self.end_time}, periodicity: {self.periodicity},'
@@ -68,6 +73,9 @@ class MailingSettings(models.Model):
     class Meta:
         verbose_name = 'Настройка рассылки'
         verbose_name_plural = 'Настройка рассылок'
+        permissions = [
+            ('change_status', 'Can change status'),
+        ]
 
 
 class Log(models.Model):

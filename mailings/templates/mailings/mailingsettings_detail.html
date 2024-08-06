@@ -13,6 +13,7 @@
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                         <li>Время начала:{{object.start_time}}</li>
                         <li>Время окончания: {{object.end_time}}</li>
+                        <li>Автор: {{object.owner}}</li>
                     </ul>
                     <a class="btn btn-primary" href="{% url 'mailings:mailingsettings_list' %}" role="button">назад</a>
                 </div>

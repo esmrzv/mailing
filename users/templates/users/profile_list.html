@@ -1,0 +1,23 @@
+{% extends 'mailings/base.html' %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <p class="display-1">Профиль</p>
+</div>
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <p class="card-text">имя: {{ user.fullname}}</p>
+                        <p class="card-text">email: {{ user.email }}</p>
+                        <p class="card-text">номер: {{ user.phone }}</p>
+                        <div class="d-flex justify-content-between align-items-center"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}l>
