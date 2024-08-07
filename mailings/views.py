@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView, TemplateView
 
 from blog.models import Blog
+from blog.services import get_blogs_from_cache
 from mailings.forms import MessageForm, ClientForm, MailingSettingsForm, MailingSettingsManagerForm
 from mailings.models import Client, MailingSettings, Log, Message
 
@@ -16,17 +17,16 @@ class HomePageView(TemplateView):
         context_data = super().get_context_data(**kwargs)
         mailings = MailingSettings.objects.all()
         clients = Client.objects.all()
-        blogs = Blog.objects.all()
         context_data['all_mailings'] = mailings.count()
         context_data['active_mailings'] = mailings.filter(status='STATED').count()
         context_data['active_clients'] = clients.values('email').distinct().count()
 
-        context_data['random_blogs'] = blogs.order_by('?')[:3]
+        context_data['random_blogs'] = get_blogs_from_cache().order_by('?')[:3]
 
         return context_data
 
 
-class ClientCreateView(LoginRequiredMixin, CreateView):
+class ClientCreateView(CreateView):
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('mailings:client_list')

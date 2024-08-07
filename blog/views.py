@@ -4,11 +4,15 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 
 from blog.forms import BlogForm
 from blog.models import Blog
+from blog.services import get_blogs_from_cache
 
 
 # Create your views here.
 class BlogListView(ListView):
     model = Blog
+
+    def get_queryset(self):
+        return get_blogs_from_cache()
 
 
 class BlogCreateView(CreateView):
