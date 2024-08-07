@@ -2,10 +2,28 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView, TemplateView
 
+from blog.models import Blog
 from mailings.forms import MessageForm, ClientForm, MailingSettingsForm, MailingSettingsManagerForm
 from mailings.models import Client, MailingSettings, Log, Message
+
+
+class HomePageView(TemplateView):
+    template_name = 'mailings/home_page.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        mailings = MailingSettings.objects.all()
+        clients = Client.objects.all()
+        blogs = Blog.objects.all()
+        context_data['all_mailings'] = mailings.count()
+        context_data['active_mailings'] = mailings.filter(status='STATED').count()
+        context_data['active_clients'] = clients.values('email').distinct().count()
+
+        context_data['random_blogs'] = blogs.order_by('?')[:3]
+
+        return context_data
 
 
 class ClientCreateView(LoginRequiredMixin, CreateView):
@@ -24,7 +42,7 @@ class ClientUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('mailings:client_list')
 
 
-class ClientDeleteView(LoginRequiredMixin,DeleteView):
+class ClientDeleteView(LoginRequiredMixin, DeleteView):
     model = Client
     success_url = reverse_lazy('mailings:client_list')
 
