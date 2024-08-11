@@ -1,20 +1,18 @@
 from django.core.cache import cache
-
+from django.db.models import F
 from blog.models import Blog
 from config.settings import CACHE_ENABLED
 
 
 def get_blogs_from_cache():
-    """
-        Возвращает список блогов из кэша или из базы,
-        если кэш не включен.
-        """
-    if not CACHE_ENABLED:  # если кэш не включен
-        return Blog.objects.all()  # возвращаем список продуктов
-    key = 'blog_list'  # ключ
-    blog = cache.get(key)  # получаем кэш по ключу
-    if blog is not None:  # если кэш не пустой
-        return blog  # возвращаем кэш
-    blog = Blog.objects.all()  # получаем список продуктов из базы
-    cache.set(key, blog)  # кладем список продуктов в кэш
+    if not CACHE_ENABLED:
+        return Blog.objects.all().annotate(views_count=F('views'))
+    key = 'blog_list'
+    blog = cache.get(key)
+    if blog is not None:
+        return blog.annotate(views_count=F('views'))  # Добавляем количество просмотров
+    blog = Blog.objects.all().annotate(views_count=F('views'))
+    cache.set(key, blog)
     return blog
+
+

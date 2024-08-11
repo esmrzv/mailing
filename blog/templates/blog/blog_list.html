@@ -18,10 +18,7 @@
                           <p> Колличество просмотров: {{ blog.views }} </p>
                     </ul>
                     <a class="btn btn-primary" href="{% url 'blog:blog_detail' blog.pk %}" role="button">Просмотр</a>
-                    {% if user.is_superuser %}
-                    <a class="btn btn-primary" href="{% url 'blog:blog_update' blog.pk %}" role="button">Редактировать</a>
-                    <a class="btn btn-primary" href="{% url 'blog:blog_delete' blog.pk %}" role="button">Удалить</a>
-                    {% endif %}
+
                 </div>
             </div>
         </div>

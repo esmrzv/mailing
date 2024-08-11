@@ -6,7 +6,7 @@
         <a class="p-2 btn btn-outline-primary" href="{% url 'mailings:client_list' %}">Клиенты</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'mailings:mailingsettings_list' %}">Рассылка</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'mailings:message_list' %}">Письмо</a>
-        <a class="p-2 btn btn-outline-primary" href="{% url 'blog:blog_list' %}">Блог</a>
+        <a class="p-2 btn btn-outline-primary" href="{% url 'mailings:log_list' %}">Статистика</a>
         {% if perms.mailings.change_status %}
         <a class="p-2 btn btn-outline-primary" href="{% url 'users:user_list' %}">Список пользователей</a>
         {% endif %}

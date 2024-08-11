@@ -64,6 +64,7 @@ class MailingSettings(models.Model):
     status = models.CharField(choices=STATUS_CHOICES, max_length=50, verbose_name='Статус')
     client = models.ManyToManyField(Client, verbose_name='Клиент')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='письмо')
+    time_last_shipment = models.DateTimeField(verbose_name='время последней отправки сообщения', blank=True, null=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец', **NULLABLE)
 
     def __str__(self):
@@ -85,6 +86,7 @@ class Log(models.Model):
 
     mailing_list = models.ForeignKey(MailingSettings, on_delete=models.CASCADE, verbose_name='рассылка')
     client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='клиент', **NULLABLE)
+    comments = models.TextField(max_length=50, verbose_name='Комментарии', **NULLABLE)
 
     def __str__(self):
         return f'{self.time} {self.status}'
